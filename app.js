@@ -13,7 +13,7 @@ app.use("/test", test);
 
 app.use("/scrappy", scrappy);
 
-const port = process.env.PORT || 4321;
+const port = process.env.APP_PORT || 4321;
 
 app.listen(port, () => {
   console.log(`App running at ${port}`);
