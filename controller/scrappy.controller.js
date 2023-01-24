@@ -5,14 +5,16 @@ const cheerio = require("cheerio");
 const axios = require("axios");
 
 exports.convertToKeywords = async (req, res) => {
-  try {
-    const response = await axios.get("https://nuxtjs.org");
+  const { website, tag } = req.body;
 
-    const keywords = await completion(getParsedHtmlAsText(response.data));
+  try {
+    const response = await axios.get(`${website}`);
+
+    const keywords = await completion(getParsedHtmlAsText(response.data, tag));
 
     res.send(keywords);
   } catch (error) {
-    res.send(error.response);
+    res.send(error.response.data);
   }
 };
 
@@ -30,8 +32,8 @@ async function completion(data) {
   }
 }
 
-function getParsedHtmlAsText(html) {
+function getParsedHtmlAsText(html, tag) {
   const $ = cheerio.load(html);
-  const data = $("heading").text();
+  const data = $(`${tag}`).text();
   return data;
 }
